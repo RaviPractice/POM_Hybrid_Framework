@@ -55,12 +55,17 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.0.0-M4</version>
 				<configuration>
+				
+				<systemPropertyVariables>
+				<Browser>${Browser}</Browser>
+				<AppUrl>${URL}</AppUrl>
+				</systemPropertyVariables>
+				
 					<suiteXmlFiles>
-						<suiteXmlFile>XMLFiles\testngLogin.xml</suiteXmlFile>
+						<suiteXmlFile>XMLFiles\${xmlFiles}</suiteXmlFile>
 					</suiteXmlFiles>
 				</configuration>
 			</plugin>
-		
 		
 		
 		</plugins>

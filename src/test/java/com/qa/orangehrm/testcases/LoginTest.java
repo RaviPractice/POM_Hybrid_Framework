@@ -1,6 +1,5 @@
 package com.qa.orangehrm.testcases;
 
-import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
 
 import com.qa.orangehrm.factory.DataProviderFactory;
@@ -16,16 +15,16 @@ public class LoginTest extends BaseClass {
 	@Test(priority = 1, description = "loginpage test")
 	public void loginWithAdmin() {
 		loginpage = new LoginPage(driver);
-		PageFactory.initElements(driver, LoginPage.class);
+		//PageFactory.initElements(driver, LoginPage.class);//comment page factory
 		logger = report.createTest("LoginTest", "Login to HRM with valid credentials");
-		loginpage.doLoginToApplication(DataProviderFactory.getExcel().getData("Login", 0, 0),
-				DataProviderFactory.getExcel().getData("Login", 0, 1));
+		loginpage.doLoginToApplication(DataProviderFactory.getExcel().getCellData("Login", 0, 0),
+				DataProviderFactory.getExcel().getCellData("Login", 0, 1));
 	}
 
 	@Test(priority = 2, description = "logout from application")
 	public void logoutFromAdmin() {
 		logoutpage = new LogoutPage(driver);
-		PageFactory.initElements(driver, LogoutPage.class);
+		//PageFactory.initElements(driver, LogoutPage.class);//comment on pagefactory
 		logger = report.createTest("LogoutTest", "logout from current session");
 		logoutpage.doLogoutFromApplication();
 

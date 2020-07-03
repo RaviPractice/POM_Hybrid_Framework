@@ -3,15 +3,15 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.qa.orangehrm.testcases.UsersPageTest">
+      <class name="com.qa.orangehrm.testcases.CreateUser">
         <methods>
           <include name="startSession"/>
-          <include name="addUserTest"/>
+          <include name="createUsers"/>
           <include name="tearDownReport"/>
           <include name="setupReport"/>
           <include name="closeSession"/>
         </methods>
-      </class> <!-- com.qa.orangehrm.testcases.UsersPageTest -->
+      </class> <!-- com.qa.orangehrm.testcases.CreateUser -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

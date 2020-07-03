@@ -8,6 +8,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Parameters;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -20,8 +21,8 @@ import com.qa.orangehrm.utility.ElementUtil;
 
 public class BaseClass {
 
-	public ExtentReports report;
-	public ExtentTest logger;
+	public static ExtentReports report;
+	public static ExtentTest logger;
 	public WebDriver driver;
 
 	@BeforeSuite
@@ -32,15 +33,27 @@ public class BaseClass {
 		report.attachReporter(html);
 		System.out.println("****LOG:INFO - Reporting set****");
 	}
-
+	// please use this when you want to accept parameters from maven/gradle/jenkins
+	
+	@Parameters({"Browser","URL"})
 	@BeforeClass
+	public void startSession(String browserName,String appUrl) {
+		System.out.println("****LOG:INFO - Starting Browser Session****");
+		driver = BrowserFactory.startBrowser(browserName, appUrl);
+		System.out.println("****LOG:INFO - Started Browser Session****");
+	}
+	
+	//please use this if we want to continue with config/propertyfile
+
+	/*@BeforeClass
 	public void startSession() {
 		System.out.println("****LOG:INFO - Starting Browser Session****");
 		String browser = DataProviderFactory.getConfig().getdata("browser");
 		String url = DataProviderFactory.getConfig().getdata("url");
 		driver = BrowserFactory.startBrowser(browser, url);
 		System.out.println("****LOG:INFO - Started Browser Session****");
-	}
+	}*/
+	
 	@AfterClass
 	public void closeSession() {
 		System.out.println("****LOG:INFO - closing Browser Session****");

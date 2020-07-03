@@ -46,7 +46,7 @@ public class BrowserFactory {
 	
 	public static void closeBrowser(WebDriver driver) {
 		driver.quit();
-		System.out.println("****LOG:INFO-Browser session terminated****");
+		System.out.println("****LOG:INFO-Browser session terminated*****");
 	}
 
 }

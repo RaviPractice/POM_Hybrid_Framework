@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -16,9 +18,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ElementUtil {
+	
+	
 	
 	
 	public static void highLightElement(WebDriver driver,WebElement element) {
@@ -49,9 +54,14 @@ public class ElementUtil {
 		try {
 		 element = driver.findElement(locator);
 		}catch(Exception e) {
-			System.out.println(" some exception occur while creating web element..");
+			System.out.println(" some exception occur while creating web element..: " +locator);
 		}
 		return element;
+	}
+	
+	public static List<WebElement> getElements(WebDriver driver,By locator) {
+		List<WebElement> elementsList = driver.findElements(locator);
+		return elementsList;
 	}
 	
 	/**
@@ -189,6 +199,12 @@ public class ElementUtil {
 		return true;
 	}
 	
+	public static  String waitForTitleToBePresent(WebDriver driver,String title, int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.titleContains(title));
+		return driver.getTitle();
+	}
+	
 	public static boolean waitForElementPresent(WebDriver driver,By locator) {
 		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(20));
 		wait.until(ExpectedConditions.presenceOfElementLocated(locator));
@@ -199,6 +215,21 @@ public class ElementUtil {
 		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(20));
 		wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 		return true;
+	}
+	
+	public static boolean doWaitForUrl(WebDriver driver,String url,int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(20));
+		return wait.until(ExpectedConditions.urlContains(url));
+	
+		
+	}
+	
+	public static Alert DoWaitForAlertToBePresence(WebDriver driver,int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(20));
+		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+		return alert;
+		
+		
 	}
 	
 	public static String doGetPageTitle(WebDriver driver) {
@@ -272,6 +303,149 @@ public class ElementUtil {
 			System.out.println("some exception got occurred while getting the text from a webelement.....");
 		}
 		return null;
+	}
+	
+	//dropdown utils - Select class utils
+	
+	
+	public void doSelectByVisableText(WebDriver driver,By locator,String value) {
+		Select select = new Select(getElement(driver,locator));
+		select.selectByVisibleText(value);
+	}
+	
+	public void doSelectByIndex(WebDriver driver,By locator,int index) {
+		Select select = new Select(getElement(driver,locator));
+		select.selectByIndex(index);
+	}
+	
+	public void doSelectByValue(WebDriver driver,By locator,String value) {
+		Select select = new Select(getElement(driver,locator));
+		select.selectByValue(value);
+		
+	}
+	
+	public int doDropdownOptionsCount(WebDriver driver,By locator) {
+		return doGetDropdownOptions(driver,locator).size();
+		
+	}
+	
+	
+	public ArrayList<String> doGetDropdownOptions(WebDriver driver,By locator) {
+		
+		ArrayList<String> al = new ArrayList<String>();
+		
+		Select select = new Select(getElement(driver,locator));
+		
+		List<WebElement> optionList = select.getOptions();
+		
+		for(int i=0;i<optionList.size();i++) {
+			String text = optionList.get(i).getText();
+			al.add(text);
+		
+		}
+		return al;
+	}
+	
+	
+	
+	public void doSelectDropdownValue(WebDriver driver,By locator,String value) {
+		
+		Select dayselect = new Select(getElement(driver,locator));
+		List<WebElement> dayList = dayselect.getOptions();
+		
+		for(int i=0;i<dayList.size();i++) {
+			String text = dayList.get(i).getText();
+			if(text.equals(value)) {
+				dayList.get(i).click();
+				break;
+			}
+		}
+		
+		
+	}
+	
+	
+	public void doSelectDropdownValueWithoutSelect(WebDriver driver,By locator,String value) {
+		
+		Select dayselect = new Select(getElement(driver,locator));
+		List<WebElement> dayList = dayselect.getOptions();
+		
+		for(int i=0;i<dayList.size();i++) {
+			String text = dayList.get(i).getText();
+			if(text.equals(value)) {
+				dayList.get(i).click();
+				break;
+			}
+		}
+		
+		
+		
+	}
+	
+	
+	
+	public void selectChoiceValues(WebDriver driver,By locator,String...value) {
+		List<WebElement> choiceList = getElements(driver,locator);
+		
+		if(!(value[0].equalsIgnoreCase("ALL"))) {
+			
+			for(int i=0;i<choiceList.size();i++) {
+				String text = choiceList.get(i).getText();
+				System.out.println(text);
+				
+				for(int k=0;k<value.length;k++) {
+					if(text.equals(value[k])) {
+						choiceList.get(i).click();
+						break;
+					}
+				}
+				
+			}
+		}
+		
+		// select all the values
+		
+		else {
+			try {
+				for(int all =0; all<choiceList.size();all++) {
+					choiceList.get(all).click();
+				}
+				
+			}catch(Exception e) {
+				
+			}
+		}
+		
+	}
+	
+	
+	// Action class -utlities
+	
+	public void doDragAndDrop(WebDriver driver,By source,By target) {
+		
+		Actions action = new Actions(driver);
+		WebElement sourceEle = getElement(driver,source);
+		WebElement destEle = getElement(driver,target);
+		action.dragAndDrop(sourceEle, destEle).build().perform();
+		
+	}
+	
+	// click when ready
+	
+	public void clickWhenReady(WebDriver driver,By locator,int timeout) {
+	WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(20));
+	WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+	element.click();
+	
+	}
+	public static void doSelectFrame(WebDriver driver,By frameId) {
+		try {
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameId));
+		}catch(Exception e) {
+			System.out.println("user not able to switch to frame..");
+		}
+		
 	}
 	
 }

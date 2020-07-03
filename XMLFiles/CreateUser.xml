@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+	<suite name="Orange HRM Regression Suite">
+	<test name="Orange HRM Functional Regression Test">
+		<classes>
+			<class name="com.qa.orangehrm.testcases.CreateUser" />
+		</classes>
+	</test>
+</suite> 
